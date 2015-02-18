@@ -1,2 +1,2 @@
 # veins-di
-Simple Dependency Injection Framework for Haxe
+Very simple, lightweight and compile-time-type driven dependency injection framework for Haxe.
