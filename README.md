@@ -2,6 +2,8 @@
 Very simple, lightweight and compile-time-type driven dependency injection framework for Haxe.
 
 ```haxe
+import veins.di.Context;
+
 class Main {
 
 	static function main () {
