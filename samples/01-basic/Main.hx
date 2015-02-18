@@ -99,7 +99,7 @@ class Main {
 
 
 		var ctx =
-			new Context(parent)
+			new Context([parent])
 			.add( D.new )
 			.run (function (x:AFactory) {
 				trace(x.cfg.cfg);
@@ -122,4 +122,3 @@ class Main {
 
 	}
 }
-

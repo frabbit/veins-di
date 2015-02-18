@@ -16,17 +16,17 @@ class Context extends ContextMacros
 
 	var runs : Array<Void->Void>;
 
-	var parent : Option<Context>;
+	var dependencies : Array<Context>;
 
 	var resolveStack : Array<String> = [];
 
-	public function new (?parent:Context)
+	public function new (?dependencies:Array<Context>)
 	{
 		registry = new Map();
 		instances = new Map();
 		remaps = new Map();
 		runs = [];
-		this.parent = parent == null ? None : Some(parent);
+		this.dependencies = dependencies == null ? [] : dependencies;
 
 	}
 
@@ -105,11 +105,21 @@ class Context extends ContextMacros
 		{
 			registry.get(id);
 		}
-		else switch parent {
-			case None:
+		else switch dependencies {
+			case []:
 				throw "cannot find instance for type " + id;
-			case Some(p):
-				p.resolveDynamicNew(id);
+			case deps:
+				var found = null;
+				for (d in deps) {
+					try {
+						found = d.resolveDynamicNew(id);
+						break;
+					} catch (e:Dynamic) {}
+				}
+				if (found == null) {
+					throw "cannot find instance for type " + id;
+				}
+				found;
 		}
 	}
 
