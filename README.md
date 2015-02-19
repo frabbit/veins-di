@@ -1,6 +1,7 @@
 # veins-di
 Very simple, lightweight and compile-time-type driven dependency injection framework for Haxe.
 
+## Example Usage
 ```haxe
 import veins.di.Context;
 
@@ -37,7 +38,7 @@ class App {
 }
 ```
 
-Lazy Injection to allow circular dependencies.
+## Lazy Injection to avoid the problem of circular dependencies.
 
 ```haxe
 import veins.di.Context;
