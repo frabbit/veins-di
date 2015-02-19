@@ -38,7 +38,7 @@ class App {
 }
 ```
 
-## Lazy Injection to avoid the problem of circular dependencies.
+## Lazy Injection (to avoid the problem of circular dependencies)
 
 ```haxe
 import veins.di.Context;
