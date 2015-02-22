@@ -9,6 +9,18 @@ class Tools {
 
 	#if macro
 
+	public static function safeThisCall (ethis:haxe.macro.Expr, f:haxe.macro.Expr->haxe.macro.Expr)
+	{
+		var type = haxe.macro.Context.typeof(ethis);
+		var ct = haxe.macro.TypeTools.toComplexType(type);
+		var replacement = macro (__x : $ct);
+		var res = f(replacement);
+		return macro @:mergeBlock {
+			var __x = $ethis;
+			$res;
+		}
+	}
+
 	public static function isVoid (t:Type)
 	{
 		return switch (t) {
