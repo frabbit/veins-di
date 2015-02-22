@@ -1,12 +1,12 @@
 package veins.di.macros;
 
-import haxe.macro.Context;
-import haxe.macro.Expr;
-import haxe.ds.Option;
-import haxe.macro.ExprTools;
-import veins.di.macros.ContextMacrosImpl;
 
+import haxe.macro.Expr;
+
+#if macro
+import veins.di.macros.ContextMacrosImpl;
 import veins.di.macros.Tools.safeThisCall as safe;
+#end
 
 class ContextMacros
 {
