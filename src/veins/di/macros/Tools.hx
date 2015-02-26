@@ -1,3 +1,4 @@
+
 package veins.di.macros;
 
 import haxe.macro.Expr;
@@ -37,10 +38,13 @@ class Tools {
 		var infix = if (pack.length > 0) "." else "";
 		return pack + infix + typeName;
 	}
-
+	public static function typeToSnakeCase(t:Type):String{
+		return StringTools.replace(typeToStringId(t),".","_");
+	}
 	public static function typeToStringId (t:Type):String
 	{
 		function def (bt:BaseType)
+		
 		{
 			var d = bt;
 			return fullQualified(d.pack, d.module, d.name);
