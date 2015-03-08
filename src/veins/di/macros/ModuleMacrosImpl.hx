@@ -186,17 +186,15 @@ class ModuleMacrosImpl
 			var varType = if (!lazy) haxe.macro.TypeTools.toComplexType(TFun([], a.t)) else haxe.macro.TypeTools.toComplexType(a.t);
 
 
-			var name = Tools.typeToSnakeCase(t);
-			var path = Tools.typeToStringId(t);
+			var name = Tools.typeToStringId(t);
 
 			var varName = "_a" + name;
 
 			var id 	= Context.makeExpr(name, cpos);
-			var loc = Context.makeExpr(path, cpos);
-			
+
 			var vname = macro @:pos(cpos) $i{varName};
 
-			var assign = macro @:pos(cpos) var $varName:$varType = (@:privateAccess $ctx.resolveDynamic($loc));
+			var assign = macro @:pos(cpos) var $varName:$varType = (@:privateAccess $ctx.resolveDynamic($id));
 
 
 			{ lazy : lazy, assign : assign , arg : vname };

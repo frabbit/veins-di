@@ -4,6 +4,7 @@ package veins.di.macros;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 import haxe.macro.Type;
+import haxe.macro.TypeTools;
 
 
 class Tools {
@@ -38,31 +39,40 @@ class Tools {
 		var infix = if (pack.length > 0) "." else "";
 		return pack + infix + typeName;
 	}
-	public static function typeToSnakeCase(t:Type):String{
-		return StringTools.replace(typeToStringId(t),".","_");
+
+	static function safeStringId (id:String)
+	{
+		return id
+			.split("->").join("_arrow_")
+			.split(":").join("_colon_")
+			.split(" ").join("_")
+			.split("<").join("_abo_")
+			.split(">").join("_abc_")
+			.split("{").join("_bo_")
+			.split("}").join("_bc_")
+			.split("(").join("_po_")
+			.split(")").join("_pc_")
+			.split(",").join("_comma_")
+			.split("?").join("_qm_");
 	}
+
+
 	public static function typeToStringId (t:Type):String
 	{
-		function def (bt:BaseType)
-		
+		function def (t:Type)
 		{
-			var d = bt;
-			return fullQualified(d.pack, d.module, d.name);
+			return safeStringId(TypeTools.toString(t));
 		}
 
 		return switch (t)
 		{
-			case TInst(tt, p):
-				def(tt.get());
-			case TType(tt, p):
-				def(tt.get());
-			case TEnum(et,_):
-				def(et.get());
-			case TAbstract(at,_):
-				def(at.get());
-			case TFun(args,ret):
-				[for (a in args) typeToStringId(a.t)].join("_arrow_") + "_arrow_" + typeToStringId(ret);
-			case _ : throw "not supported type " + haxe.macro.TypeTools.toString(t);
+			case TInst(_, _), TType(_, _), TEnum(_,_), TAbstract(_,_), TFun(_,_), TAnonymous(_):
+				def(t);
+			case TDynamic(x) if (x != null): def(t);
+			case TLazy(f):
+				typeToStringId(f());
+			case TMono(_), TDynamic(_):
+				throw "not supported type '" + haxe.macro.TypeTools.toString(t) + "'";
 		}
 	}
 	#end
