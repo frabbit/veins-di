@@ -1,17 +1,17 @@
 package ;
 
-import veins.di.Context;
+import veins.di.Module;
 
 class Main {
 
 	static function main ()
 	{
-		var subA = new Context().add(A.new);
+		var subA = Module.make().add(A.new);
 
-		var subB = new Context().add(B.new);
+		var subB = Module.make().add(B.new);
 
 
-		var ctx = new Context([subA, subB])
+		var ctx = Module.make([subA, subB])
 		.add(C.new)
 		.run(function (c:C) {
 			c.startup();

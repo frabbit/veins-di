@@ -8,7 +8,7 @@ import veins.di.macros.Tools;
 import haxe.macro.ExprTools;
 
 
-class ContextMacrosImpl
+class ModuleMacrosImpl
 {
 	#if macro
 

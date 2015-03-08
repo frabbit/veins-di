@@ -1,14 +1,12 @@
 package ;
 
-import veins.di.Context;
+import veins.di.Module;
 
 class Main {
 
 	static function main ()
 	{
-		var ctx = new Context();
-
-		ctx.add( A.new )
+		Module.make().add( A.new )
 		.add( B.new )
 		.run(function (b:B) {
 			b.startup();

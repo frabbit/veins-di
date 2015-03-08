@@ -1,4 +1,4 @@
-import veins.di.Context;
+import veins.di.Module;
 
 typedef MyFilter = Int->Int;
 
@@ -89,7 +89,7 @@ class Main {
 	static function main ()
 	{
 		var parent =
-			new Context()
+			Module.make()
 			.add( AFactory.new )
 			.add( ( AFactoryConfig.new : IAFactoryConfig ) )
 			.add( ( Config.new : IConfig ) )
@@ -99,7 +99,7 @@ class Main {
 
 
 		var ctx =
-			new Context([parent])
+			Module.make([parent])
 			.add( D.new )
 			.run (function (x:AFactory) {
 				trace(x.cfg.cfg);

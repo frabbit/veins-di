@@ -1,13 +1,13 @@
 package ;
 
-import veins.di.Context;
+import veins.di.Module;
 
 class Main {
 
 	static function main ()
 	{
 
-		var ctx = new Context()
+		var ctx = Module.make()
 		.add(App.new)
 		.add( function ():Point return { x : 1, y : 1 } )
 		.add( function ():AppName return "MyApp" )

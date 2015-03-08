@@ -1,11 +1,11 @@
 package veins.di;
 
-import veins.di.macros.ContextMacros;
+import veins.di.macros.ModuleMacros;
 import haxe.ds.GenericStack;
 import haxe.ds.Option;
 import haxe.macro.Expr;
 
-class Context extends ContextMacros
+class Module extends ModuleMacros
 {
 
 	var registry : Map<String, Void->Dynamic>;
@@ -16,11 +16,11 @@ class Context extends ContextMacros
 
 	var runs : Array<Void->Void>;
 
-	var dependencies : Array<Context>;
+	var dependencies : Array<Module>;
 
 	var resolveStack : Array<String> = [];
 
-	public function new (?dependencies:Array<Context>)
+	function new (?dependencies:Array<Module>)
 	{
 		registry = new Map();
 		instances = new Map();
@@ -28,6 +28,10 @@ class Context extends ContextMacros
 		runs = [];
 		this.dependencies = dependencies == null ? [] : dependencies;
 
+	}
+
+	public static function make (?dependencies:Array<Module>) {
+		return new Module(dependencies);
 	}
 
 	public function bootstrap ()
@@ -51,7 +55,7 @@ class Context extends ContextMacros
 		return this;
 	}
 
-	function addDynamic (id:String, f : Void->Dynamic):Context
+	function addDynamic (id:String, f : Void->Dynamic):Module
 	{
 		if (registry.exists(id)) {
 			throw "instance for type " + id + "already registered";
