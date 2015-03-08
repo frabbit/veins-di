@@ -3,13 +3,13 @@ Very simple, lightweight and compile-time-type-driven dependency injection frame
 
 ## Example Usage
 ```haxe
-import veins.di.Context;
+import veins.di.Module;
 
 class Main {
 
 	static function main () {
 
-		var ctx = new Context();
+		var ctx = Module.make();
 
 		ctx.add( Config.new )
 		.add( App.new )
@@ -41,13 +41,13 @@ class App {
 ## Lazy Injection (to avoid the problem of circular dependencies)
 
 ```haxe
-import veins.di.Context;
+import veins.di.Module;
 
 class Main {
 
 	static function main ()
 	{
-		var ctx = new Context();
+		var ctx = Module.make();
 
 		ctx.add( A.new )
 		.add( B.new )
@@ -75,21 +75,21 @@ class B {
 }
 ```
 
-## Context Dependencies
+## Module Dependencies
 
 ```haxe
-import veins.di.Context;
+import veins.di.Module;
 
 class Main {
 
 	static function main ()
 	{
-		var subA = new Context().add(A.new);
+		var subA = Module.make().add(A.new);
 
-		var subB = new Context().add(B.new);
+		var subB = Module.make().add(B.new);
 
 
-		var ctx = new Context([subA, subB])
+		var ctx = Module.make([subA, subB])
 		.add(C.new)
 		.run(function (c:C) {
 			c.startup();
@@ -127,14 +127,14 @@ class C {
 ```haxe
 package ;
 
-import veins.di.Context;
+import veins.di.Module;
 
 class Main {
 
 	static function main ()
 	{
 
-		var ctx = new Context()
+		var ctx = Module.make()
 		.add(App.new)
 		.add( function ():Point return { x : 1, y : 1 } )
 		.add( function ():AppName return "MyApp" )
