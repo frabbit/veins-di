@@ -9,9 +9,9 @@ class Main {
 
 	static function main () {
 
-		var ctx = Module.make();
+		var m = Module.make();
 
-		ctx.add( Config.new )
+		m.add( Config.new )
 		.add( App.new )
 		.run(function (app:App) {
 			app.startup();
@@ -47,9 +47,9 @@ class Main {
 
 	static function main ()
 	{
-		var ctx = Module.make();
+		var m = Module.make();
 
-		ctx.add( A.new )
+		m.add( A.new )
 		.add( B.new )
 		.run(function (b:B) {
 			b.startup();
@@ -89,7 +89,7 @@ class Main {
 		var subB = Module.make().add(B.new);
 
 
-		var ctx = Module.make([subA, subB])
+		var m = Module.make([subA, subB])
 		.add(C.new)
 		.run(function (c:C) {
 			c.startup();
@@ -134,7 +134,7 @@ class Main {
 	static function main ()
 	{
 
-		var ctx = Module.make()
+		var m = Module.make()
 		.add(App.new)
 		.add( function ():Point return { x : 1, y : 1 } )
 		.add( function ():AppName return "MyApp" )
