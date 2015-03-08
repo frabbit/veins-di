@@ -9,6 +9,30 @@ import haxe.macro.TypeTools;
 
 class Tools {
 
+	static var replaceMap = [
+		"-" => "_dash_",
+		":" => "_colon_",
+		" " => "_s_",
+		"<" => "_abo_",
+		">" => "_abc_",
+		"{" => "_bo_",
+		"}" => "_bc_",
+		"(" => "_po_",
+		")" => "_pc_",
+		"," => "_comma_",
+		"?" => "_qm_",
+		"." => "_dot_"
+	];
+
+	public static function idToType (id:String)
+	{
+		var r = id;
+		for (k in replaceMap.keys()) {
+			r = r.split(replaceMap.get(k)).join(k);
+		}
+		return r;
+	}
+
 	#if macro
 
 	public static function safeThisCall (ethis:haxe.macro.Expr, f:haxe.macro.Expr->haxe.macro.Expr)
@@ -42,19 +66,11 @@ class Tools {
 
 	static function safeStringId (id:String)
 	{
-		return id
-			.split("->").join("_arrow_")
-			.split(":").join("_colon_")
-			.split(" ").join("_")
-			.split("<").join("_abo_")
-			.split(">").join("_abc_")
-			.split("{").join("_bo_")
-			.split("}").join("_bc_")
-			.split("(").join("_po_")
-			.split(")").join("_pc_")
-			.split(",").join("_comma_")
-			.split("?").join("_qm_")
-			.split(".").join("_dot_");
+		var r = id;
+		for (k in replaceMap.keys()) {
+			r = r.split(k).join(replaceMap.get(k));
+		}
+		return r;
 	}
 
 

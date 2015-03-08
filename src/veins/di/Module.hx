@@ -4,6 +4,7 @@ import veins.di.macros.ModuleMacros;
 import haxe.ds.GenericStack;
 import haxe.ds.Option;
 import haxe.macro.Expr;
+import veins.di.macros.Tools;
 
 class Module extends ModuleMacros
 {
@@ -58,7 +59,7 @@ class Module extends ModuleMacros
 	function addDynamic (id:String, f : Void->Dynamic):Module
 	{
 		if (registry.exists(id)) {
-			throw "instance for type " + id + "already registered";
+			throw "instance for type " + Tools.idToType(id) + "already registered";
 		}
 		registry.set(id, f);
 		return this;
@@ -80,7 +81,7 @@ class Module extends ModuleMacros
 				if (instance == null)
 				{
 					var isCircular = Lambda.exists(resolveStack, function (x) return x == id);
-					if (isCircular) throw "Circular Dependency:\n=> " + resolveStack.join("\n=> ") + "\n=> " + id;
+					if (isCircular) throw "Circular Dependency:\n=> " + resolveStack.map(Tools.idToType).join("\n=> ") + "\n=> " + Tools.idToType(id);
 					resolveStack.push(id);
 					var res = f();
 					if (remaps.exists(id)) {
@@ -111,7 +112,7 @@ class Module extends ModuleMacros
 		}
 		else switch dependencies {
 			case []:
-				throw "cannot find instance for type " + id;
+				throw "cannot find instance for type " + Tools.idToType(id);
 			case deps:
 				var found = null;
 				for (d in deps) {
@@ -121,7 +122,7 @@ class Module extends ModuleMacros
 					} catch (e:Dynamic) {}
 				}
 				if (found == null) {
-					throw "cannot find instance for type " + id;
+					throw "cannot find instance for type " + Tools.idToType(id);
 				}
 				found;
 		}
