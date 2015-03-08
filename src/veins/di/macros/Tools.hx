@@ -53,7 +53,8 @@ class Tools {
 			.split("(").join("_po_")
 			.split(")").join("_pc_")
 			.split(",").join("_comma_")
-			.split("?").join("_qm_");
+			.split("?").join("_qm_")
+			.split(".").join("_dot_");
 	}
 
 
