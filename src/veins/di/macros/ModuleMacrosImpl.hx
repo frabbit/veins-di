@@ -175,7 +175,8 @@ class ModuleMacrosImpl
 
 	public static function convertArgsToCalls (ctx:Expr, args:Array<{ name : String, opt : Bool, t : Type }>,  mkLazy:Bool, cpos)
 	{
-		return [for (a in args) {
+		return [for (i in 0...args.length) {
+			var a = args[i];
 			var lazy = isLazyTFun(a.t);
 
 			var t = switch (a.t) {
@@ -188,7 +189,7 @@ class ModuleMacrosImpl
 
 			var name = Tools.typeToStringId(t);
 
-			var varName = "_a" + name;
+			var varName = "_a_inject_" + i;
 
 			var id 	= Context.makeExpr(name, cpos);
 

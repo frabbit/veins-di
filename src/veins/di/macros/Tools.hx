@@ -9,29 +9,6 @@ import haxe.macro.TypeTools;
 
 class Tools {
 
-	static var replaceMap = [
-		"-" => "_dash_",
-		":" => "_colon_",
-		" " => "_s_",
-		"<" => "_abo_",
-		">" => "_abc_",
-		"{" => "_bo_",
-		"}" => "_bc_",
-		"(" => "_po_",
-		")" => "_pc_",
-		"," => "_comma_",
-		"?" => "_qm_",
-		"." => "_dot_"
-	];
-
-	public static function idToType (id:String)
-	{
-		var r = id;
-		for (k in replaceMap.keys()) {
-			r = r.split(replaceMap.get(k)).join(k);
-		}
-		return r;
-	}
 
 	#if macro
 
@@ -64,21 +41,11 @@ class Tools {
 		return pack + infix + typeName;
 	}
 
-	static function safeStringId (id:String)
-	{
-		var r = id;
-		for (k in replaceMap.keys()) {
-			r = r.split(k).join(replaceMap.get(k));
-		}
-		return r;
-	}
-
-
 	public static function typeToStringId (t:Type):String
 	{
 		function def (t:Type)
 		{
-			return safeStringId(TypeTools.toString(t));
+			return TypeTools.toString(t);
 		}
 
 		return switch (t)
