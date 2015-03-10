@@ -21,7 +21,7 @@ class ModuleMacrosImpl
 			case _ : throw "unexpected";
 		}
 
-		var t = Context.typeof(te);
+		var t = typeofNormalized(te);
 
 		var id = Tools.typeToStringId(t);
 
@@ -64,7 +64,7 @@ class ModuleMacrosImpl
 			case None : f;
 		}
 
-		var t = Context.typeof(f);
+		var t = typeofNormalized(f);
 
 		var v = switch extractTFun(t)
 		{
@@ -82,7 +82,7 @@ class ModuleMacrosImpl
 			case Some({ t : x}):
 				try {
 					var ct = haxe.macro.TypeTools.toComplexType(v.ret);
-					var t = Context.typeof(macro ( (cast null : $ct) : $x));
+					var t = typeofNormalized(macro ( (cast null : $ct) : $x));
 					Tools.typeToStringId(t);
 				} catch (x:Error) {
 					//throw new Error(x, origExpr.pos);
@@ -112,7 +112,7 @@ class ModuleMacrosImpl
 
 		var origExpr = f;
 
-		var t = Context.typeof(f);
+		var t = typeofNormalized(f);
 
 		var v = switch extractTFun(t)
 		{
@@ -132,13 +132,19 @@ class ModuleMacrosImpl
 		return ret;
 	}
 
+	static function typeofNormalized (f:Expr) {
+		var t = Context.typeof(f);
+		Tools.typeNormalize(t);
+		return t;
+	}
+
 	public static function run (ethis:Expr, f:ExprOf<Function>):Expr
 	{
 		var cpos = Context.currentPos();
 
 		var origExpr = f;
 
-		var t = Context.typeof(f);
+		var t = typeofNormalized(f);
 
 
 		var v = switch (t) {

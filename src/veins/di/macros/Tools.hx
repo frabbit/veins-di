@@ -41,6 +41,24 @@ class Tools {
 		return pack + infix + typeName;
 	}
 
+	public static function typeNormalize (t:Type)
+	{
+		TypeTools.iter(t, function f (t1) {
+			switch (t1) {
+				case null:
+				case TFun(args, ret):
+					for (a in args) {
+						a.name = "";
+						typeNormalize(a.t);
+					}
+					typeNormalize(ret);
+				case _: typeNormalize(t1);
+			}
+
+		});
+
+	}
+
 	public static function typeToStringId (t:Type):String
 	{
 		function def (t:Type)
