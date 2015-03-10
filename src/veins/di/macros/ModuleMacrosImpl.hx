@@ -4,6 +4,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
 import haxe.ds.Option;
+import haxe.macro.TypeTools;
 import veins.di.macros.Tools;
 import haxe.macro.ExprTools;
 
@@ -50,7 +51,47 @@ class ModuleMacrosImpl
 				None;
 		}
 	}
+	static function err <T>(str:String, pos):T {
+		Context.error(str, pos);
+		throw "error";
+	}
 
+	public static function addBundle(ethis:Expr, b:ExprOf<{}>):Expr
+	{
+
+		var r = switch (b.expr)
+		{
+			case EParenthesis( { expr : ECheckType(macro _, ct) }):
+				var expr = macro @:pos(b.pos) ( null : $ct );
+				{ ct: ct, expr : expr };
+			case _ : err("expression must be checktype like addBundle(( _ : MyType ))", b.pos);
+		}
+		var ct = r.ct;
+		var typeExpr = r.expr;
+		var t = typeofNormalized(typeExpr);
+
+		return switch [t, Context.follow(t)]
+		{
+			case [TType(_,_), TAnonymous(a)]:
+				var afields = a.get().fields;
+
+				var funArgs = [for (f in afields) { name : f.name, type : TypeTools.toComplexType(f.type) }];
+				var objFields = [for (f in afields) { field : f.name, expr : macro @:pos(b.pos) $i{f.name} }];
+
+				var res = { expr : EObjectDecl(objFields), pos : b.pos }
+
+				var f = EFunction(null, {
+					args : funArgs,
+					ret : ct,
+					expr : macro return $res
+				});
+				var fexpr = { expr : f, pos : b.pos };
+				macro $ethis.add($fexpr);
+			case _ :
+				err("error type of argument is not a structure aliases by a typedef", b.pos);
+		}
+
+	}
 	public static function add (ethis:Expr, f:ExprOf<Function>):Expr
 	{
 
@@ -69,9 +110,9 @@ class ModuleMacrosImpl
 		var v = switch extractTFun(t)
 		{
 			case Some({ args : args, ret : Tools.isVoid(_) => true }):
-				Context.error("the return type of f should be a valid type, not Void", cpos);
+				err("the return type of f should be a valid type, not Void", cpos);
 			case None:
-				Context.error("f must be a function returning a type", cpos);
+				err("f must be a function returning a type", cpos);
 			case Some(x): x;
 		}
 
@@ -86,7 +127,7 @@ class ModuleMacrosImpl
 					Tools.typeToStringId(t);
 				} catch (x:Error) {
 					//throw new Error(x, origExpr.pos);
-					haxe.macro.Context.error(x.message, origExpr.pos);
+					err(x.message, origExpr.pos);
 
 				}
 			case None: Tools.typeToStringId(v.ret);
@@ -117,10 +158,10 @@ class ModuleMacrosImpl
 		var v = switch extractTFun(t)
 		{
 			case Some({ args : args, ret : Tools.isVoid(_) => true }):
-				Context.error("the return type of f should be a valid type, not Void", cpos);
+				err("the return type of f should be a valid type, not Void", cpos);
 			case Some(x = { args : [_]}): x;
 			case _:
-				Context.error("f must be a function with one argument and one returntype", cpos);
+				err("f must be a function with one argument and one returntype", cpos);
 		}
 
 		var name = Tools.typeToStringId(v.ret);
@@ -149,11 +190,11 @@ class ModuleMacrosImpl
 
 		var v = switch (t) {
 			case TFun(args, Tools.isVoid(_) => false):
-				Context.error("the return type of f should be Void", cpos);
+				err("the return type of f should be Void", cpos);
 			case TFun(args, Tools.isVoid(_) => true):
 				convertArgsToCalls(ethis, args, true, cpos);
 			default:
-				Context.error("f must be a function returning a type", cpos);
+				err("f must be a function returning a type", cpos);
 		}
 
 		var assigns = [for (e in v) e.assign];

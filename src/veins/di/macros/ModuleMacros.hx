@@ -16,6 +16,11 @@ class ModuleMacros
 		return safe(ethis, ModuleMacrosImpl.add.bind(_, f));
 	}
 
+	macro public function addBundle (ethis:Expr, o:ExprOf<{}>):Expr
+	{
+		return safe(ethis, ModuleMacrosImpl.addBundle.bind(_, o));
+	}
+
 	macro public function remap (ethis:Expr, f:ExprOf<Function>):Expr
 	{
 		return safe(ethis, ModuleMacrosImpl.remap.bind(_, f));
