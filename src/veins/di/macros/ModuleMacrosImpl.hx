@@ -70,9 +70,9 @@ class ModuleMacrosImpl
 		var typeExpr = r.expr;
 		var t = typeofNormalized(typeExpr);
 
-		return switch [t, Context.follow(t)]
+		return switch Context.follow(t)
 		{
-			case [TType(_,_), TAnonymous(a)]:
+			case TAnonymous(a):
 				var afields = a.get().fields;
 
 				var funArgs = [for (f in afields) { name : f.name, type : TypeTools.toComplexType(f.type) }];
