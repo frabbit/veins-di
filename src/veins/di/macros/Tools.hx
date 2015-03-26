@@ -16,9 +16,9 @@ class Tools {
 	{
 		var type = haxe.macro.Context.typeof(ethis);
 		var ct = haxe.macro.TypeTools.toComplexType(type);
-		var replacement = macro (__x : $ct);
+		var replacement = macro @:pos(ethis.pos) (__x : $ct);
 		var res = f(replacement);
-		return macro @:mergeBlock {
+		return macro @:pos(ethis.pos) @:mergeBlock {
 			var __x = $ethis;
 			$res;
 		}
