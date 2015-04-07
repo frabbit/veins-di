@@ -1,6 +1,6 @@
-
 package veins.di.macros;
 
+#if macro
 import haxe.macro.Expr;
 import haxe.macro.Context;
 import haxe.macro.Type;
@@ -8,9 +8,6 @@ import haxe.macro.TypeTools;
 
 
 class Tools {
-
-
-	#if macro
 
 	public static function safeThisCall (ethis:haxe.macro.Expr, f:haxe.macro.Expr->haxe.macro.Expr)
 	{
@@ -77,6 +74,5 @@ class Tools {
 				throw "not supported type '" + haxe.macro.TypeTools.toString(t) + "'";
 		}
 	}
-	#end
-
 }
+#end
