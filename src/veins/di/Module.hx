@@ -86,7 +86,9 @@ class Module extends ModuleMacros
 					var res = f();
 					if (remaps.exists(id)) {
 						for (c in remaps.get(id)) {
-							res = c(res);
+							var newRes = c(res);
+							if (newRes == res) throw "a remap function must return a different instance for " + id;
+							res = newRes;
 						}
 					}
 					resolveStack.pop();
@@ -117,7 +119,7 @@ class Module extends ModuleMacros
 				var found = null;
 				for (d in deps) {
 					try {
-						found = d.resolveDynamicNew(id);
+						found = d.resolveDynamic(id);
 						break;
 					} catch (e:Dynamic) {}
 				}

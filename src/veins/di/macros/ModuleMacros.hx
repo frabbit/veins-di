@@ -21,11 +21,6 @@ class ModuleMacros
 		return safe(ethis, ModuleMacrosImpl.addBundle.bind(_, o));
 	}
 
-	macro public function remap (ethis:Expr, f:ExprOf<Function>):Expr
-	{
-		return safe(ethis, ModuleMacrosImpl.remap.bind(_, f));
-	}
-
 	macro public function resolve (ethis:Expr, t:Expr):Expr
 	{
 		return safe(ethis, ModuleMacrosImpl.resolve.bind(_, t));
