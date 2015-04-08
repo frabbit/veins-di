@@ -80,7 +80,7 @@ class Module extends ModuleMacros
 			{
 				if (instance == null)
 				{
-					var isCircular = Lambda.exists(resolveStack, function (x) return x == id);
+					var isCircular = resolveStack.indexOf(id) != -1;
 					if (isCircular) throw "Circular Dependency:\n=> " + resolveStack.join("\n=> ") + "\n=> " + id;
 					resolveStack.push(id);
 					var res = f();
