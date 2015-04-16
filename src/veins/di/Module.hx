@@ -1,7 +1,5 @@
 package veins.di;
 
-import haxe.ds.GenericStack;
-import haxe.ds.Option;
 import haxe.macro.Expr;
 
 #if macro
