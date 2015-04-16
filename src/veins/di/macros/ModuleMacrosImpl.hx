@@ -1,19 +1,15 @@
 package veins.di.macros;
 
+#if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
 import haxe.ds.Option;
 import haxe.macro.TypeTools;
-import veins.di.macros.Tools;
 import haxe.macro.ExprTools;
-
 
 class ModuleMacrosImpl
 {
-	#if macro
-
-
 
 	public static function resolve (ethis:Expr, te:Expr):Expr
 	{
@@ -249,5 +245,5 @@ class ModuleMacrosImpl
 		}];
 	}
 
-	#end
 }
+#end
