@@ -36,7 +36,7 @@ class Module
 		return new Module(dependencies);
 	}
 
-	macro public function add (ethis:Expr, f:ExprOf<Function>):Expr
+	macro public function add (ethis:Expr, f:ExprOf<haxe.Constraints.Function>):Expr
 	{
 		return safe(ethis, ModuleMacrosImpl.add.bind(_, f));
 	}
@@ -51,7 +51,7 @@ class Module
 		return safe(ethis, ModuleMacrosImpl.resolve.bind(_, t));
 	}
 
-	macro public function run (ethis:Expr, f:ExprOf<Function>):Expr
+	macro public function run (ethis:Expr, f:ExprOf<haxe.Constraints.Function>):Expr
 	{
 		return safe(ethis, ModuleMacrosImpl.run.bind(_, f));
 	}
